@@ -1,4 +1,6 @@
-package com.ee.kmp
+package com.ee.kmp.ui
+
+import com.ee.kmp.getPlatform
 
 class Greeting {
     private val platform = getPlatform()

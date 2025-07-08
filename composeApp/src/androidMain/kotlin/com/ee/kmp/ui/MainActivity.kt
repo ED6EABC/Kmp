@@ -1,4 +1,4 @@
-package com.ee.kmp
+package com.ee.kmp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
