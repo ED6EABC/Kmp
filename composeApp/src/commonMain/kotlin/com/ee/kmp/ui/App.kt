@@ -20,6 +20,9 @@ fun App() {
                 is SystemAction.Navigate -> {
                     navController.navigate(systemAction.route.path)
                 }
+                SystemAction.NavigateBack -> {
+                    navController.popBackStack()
+                }
             }
         }
     }

@@ -3,4 +3,6 @@
     <string name="nameLabel">Nombre de usuario</string>
     <string name="passwordLabel">Contraseña</string>
     <string name="Login">Login</string>
+
+    <string name="cats">Cats</string>
 </resources>

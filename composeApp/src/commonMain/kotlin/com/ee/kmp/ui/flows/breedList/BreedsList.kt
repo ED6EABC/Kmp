@@ -2,8 +2,10 @@ package com.ee.kmp.ui.flows.breedList
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,7 +18,10 @@ import com.ee.kmp.di.platformDataModule
 import com.ee.kmp.di.presentationModule
 import com.ee.kmp.ui.actions.SystemAction
 import com.ee.kmp.ui.composables.BreedCard
+import com.ee.kmp.ui.composables.CustomTopBar
+import com.ee.kmp.ui.composables.TopBarConfiguration
 import com.ee.kmp.ui.flows.login.BreedAction
+import com.ee.kmp.ui.navigation.Routes
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplicationPreview
 import org.koin.compose.viewmodel.koinViewModel
@@ -50,17 +55,28 @@ fun BreedList(
     //val breedViewModel:BreedViewModel = koinViewModel()
     val breeds: List<Breed>? by breedViewModel.state.collectAsState()
 
-    LazyColumn(
+    Scaffold(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
-    ) {
-        items(
-            items = breeds as List<Breed?>,
-            key = { it?.id ?: "" }
-        ) {
-            it?.let {
-                BreedCard(it) { breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction)) }
-            }
-        }
-    }
+        topBar = {
+            CustomTopBar(
+                config = TopBarConfiguration.Default,
+                onAction = { onSystemAction(SystemAction.Navigate(Routes.Favorites)) }
+            )
+        },
+         content = { paddingValues ->
+             LazyColumn(
+                 modifier = Modifier.fillMaxSize().padding(paddingValues),
+                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
+             ) {
+                 items(
+                     items = breeds as List<Breed?>,
+                     key = { it?.id ?: "" }
+                 ) {
+                     it?.let {
+                         BreedCard(it) { breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction)) }
+                     }
+                 }
+             }
+         }
+    )
 }
