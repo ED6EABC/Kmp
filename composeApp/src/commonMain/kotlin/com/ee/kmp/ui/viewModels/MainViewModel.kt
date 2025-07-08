@@ -1,4 +1,4 @@
-package com.ee.kmp.ui
+package com.ee.kmp.ui.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -20,6 +20,7 @@ koin = "4.1.0"
 slf4j = "1.7.36"
 kotlinxSerializationJson = "1.9.0"
 coilVersion = "3.2.0"
+navigationVersion = "2.9.0-beta03"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -55,6 +56,8 @@ koin-core-coroutines = { module = "io.insert-koin:koin-core-coroutines", version
 
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilVersion" }
 coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilVersion" }
+
+navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

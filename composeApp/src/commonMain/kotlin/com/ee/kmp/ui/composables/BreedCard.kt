@@ -1,4 +1,4 @@
-package com.ee.kmp.ui
+package com.ee.kmp.ui.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,8 +23,11 @@ private fun BreedCardPreview() {
 }
 
 @Composable
-fun BreedCard(breed: Breed) {
-    Card(modifier = Modifier.padding(top = 8.dp)) {
+fun BreedCard(breed: Breed, onClick: (Breed) -> Unit) {
+    Card(
+        modifier = Modifier.padding(top = 8.dp),
+        onClick = { onClick(breed) }
+    ) {
         Row(modifier = Modifier.padding(8.dp)) {
             AsyncImage(
                 model = "https://cdn2.thecatapi.com/images/${breed.referenceImageId}.jpg",
