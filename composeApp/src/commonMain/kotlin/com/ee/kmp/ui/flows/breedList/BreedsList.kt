@@ -78,29 +78,28 @@ fun BreedList(
         },
          content = { paddingValues ->
 
-             when {
-                 uiState.breeds != null -> {
-                     LazyColumn(
-                         modifier = Modifier.fillMaxSize().padding(paddingValues),
-                         state = lazyListState,
-                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
-                     ) {
-                         items(
-                             items = uiState.breeds as List<Breed?>,
-                             key = { it?.id ?: "" }
-                         ) {
-                             it?.let { breed ->
-                                 BreedCard(
-                                     breed = it,
-                                     onClick = {
-                                         breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction))
-                                     }
-                                 )
+             LazyColumn(
+                 modifier = Modifier.fillMaxSize().padding(paddingValues),
+                 state = lazyListState,
+                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
+             ) {
+                 items(
+                     items = uiState.breeds as List<Breed?>,
+                     key = { it?.id ?: "" }
+                 ) {
+                     it?.let { breed ->
+                         BreedCard(
+                             breed = it,
+                             onClick = {
+                                 breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction))
                              }
-                         }
+                         )
                      }
                  }
-                 uiState.isError -> { TODO() }
+             }
+
+             if(uiState.isError) {
+                 TODO()
              }
 
              Loader(uiState.isLoading)
@@ -108,7 +107,7 @@ fun BreedList(
     )
 
     LaunchedEffect(reachedBottom) {
-        if (reachedBottom && !uiState.isLoading) {
+        if (reachedBottom && !uiState.isLoading && !uiState.isReachLimit) {
             breedViewModel.onAction(BreedAction.OnLoadBreeds)
         }
     }

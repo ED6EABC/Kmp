@@ -13,29 +13,43 @@ class MainRepositoryImp(
     private val httpClient: HttpClient
 ): MainRepository {
 
-    override suspend fun getData(page: Int, limit: Int): List<Breed> {
+    override suspend fun getData(request: APIs.Breeds.Request): APIs.Breeds.Response {
 
         val response = httpClient.get(urlString = APIs.Breeds.url) {
-            parameter("page", page)
-            parameter("limit", limit)
+            parameter("page", request.page)
+            parameter("limit", request.limit)
         }
 
         return when(response.status) {
             HttpStatusCode.Companion.OK -> {
-                response.body<List<Breed>>()
-                //json.decodeFromString<List<Breed>>(response.body<String>())
+                APIs.Breeds.Response(
+                    response.body<List<Breed>>(),
+                    response.headers["pagination-count"]?.toInt() ?: 0
+                )
             }
             HttpStatusCode.Companion.BadRequest -> {
-                listOf()
+                APIs.Breeds.Response(
+                    listOf(),
+                    0
+                )
             }
             HttpStatusCode.Companion.InternalServerError -> {
-                listOf()
+                APIs.Breeds.Response(
+                    listOf(),
+                    0
+                )
             }
             HttpStatusCode.Companion.Unauthorized -> {
-                listOf()
+                APIs.Breeds.Response(
+                    listOf(),
+                    0
+                )
             }
             else -> {
-                listOf()
+                APIs.Breeds.Response(
+                    listOf(),
+                    0
+                )
             }
         }
     }

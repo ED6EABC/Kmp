@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ee.kmp.data.model.Breed
+import com.ee.kmp.data.remote.APIs
 import com.ee.kmp.domine.useCases.FindFavoriteUseCase
 import com.ee.kmp.domine.useCases.GetBreedsUseCase
 import com.ee.kmp.domine.useCases.RemoveFavoriteUseCase
@@ -35,16 +36,17 @@ class BreedViewModel(
     private fun getData() {
         setLoader(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val content = getBreedsUseCase.invoke(_uiState.value.page, 10).toMutableList()
+            val content = getBreedsUseCase.invoke(APIs.Breeds.Request(_uiState.value.page, 10))
 
             val newContent = _uiState.value.breeds
-            newContent.addAll(content)
+            newContent.addAll(content.breeds)
 
             _uiState.update {
                 it.copy(
                     breeds = newContent,
                     page = it.page + 1,
-                    isError = false
+                    isError = false,
+                    isReachLimit = newContent.size >= content.paginationCount
                 )
             }
             setLoader(false)
@@ -93,5 +95,6 @@ data class UiState(
     var breeds: MutableList<Breed> = mutableListOf(),
     var isLoading: Boolean = true,
     var page: Int = 0,
-    var isError: Boolean = false
+    var isError: Boolean = false,
+    var isReachLimit: Boolean = false
 )
