@@ -5,6 +5,7 @@ import com.ee.kmp.domine.MainRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
 
@@ -12,10 +13,12 @@ class MainRepositoryImp(
     private val httpClient: HttpClient
 ): MainRepository {
 
-    override suspend fun getData(): List<Breed>? {
-        //api_key=live_gyX4Aur2uY2uZLQpYbwY5VN2hlrXQJU0uxmwbfdI9UFoU9dJcLnhuQ8qvHgvovTl&limit=10
+    override suspend fun getData(page: Int, limit: Int): List<Breed> {
 
-        val response = httpClient.get(urlString = "https://api.thecatapi.com/v1/breeds")
+        val response = httpClient.get(urlString = APIs.Breeds.url) {
+            parameter("page", page)
+            parameter("limit", limit)
+        }
 
         return when(response.status) {
             HttpStatusCode.Companion.OK -> {
@@ -23,16 +26,16 @@ class MainRepositoryImp(
                 //json.decodeFromString<List<Breed>>(response.body<String>())
             }
             HttpStatusCode.Companion.BadRequest -> {
-                null
+                listOf()
             }
             HttpStatusCode.Companion.InternalServerError -> {
-                null
+                listOf()
             }
             HttpStatusCode.Companion.Unauthorized -> {
-                null
+                listOf()
             }
             else -> {
-                null
+                listOf()
             }
         }
     }

@@ -16,7 +16,6 @@ fun App() {
     Scaffold { padding ->
         NavGraph(padding, navController) { systemAction ->
             when(systemAction) {
-                is SystemAction.Loader -> TODO()
                 is SystemAction.Navigate -> {
                     navController.navigate(systemAction.route.path)
                 }

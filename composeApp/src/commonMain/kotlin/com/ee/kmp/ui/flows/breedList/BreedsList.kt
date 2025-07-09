@@ -5,10 +5,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ee.kmp.data.model.Breed
@@ -19,6 +23,7 @@ import com.ee.kmp.di.presentationModule
 import com.ee.kmp.ui.actions.SystemAction
 import com.ee.kmp.ui.composables.BreedCard
 import com.ee.kmp.ui.composables.CustomTopBar
+import com.ee.kmp.ui.composables.Loader
 import com.ee.kmp.ui.composables.TopBarConfiguration
 import com.ee.kmp.ui.flows.login.BreedAction
 import com.ee.kmp.ui.navigation.Routes
@@ -49,11 +54,19 @@ private fun BreedListPreview() {
 
 @Composable
 fun BreedList(
-    breedViewModel:BreedViewModel,
-    onSystemAction: (SystemAction) -> Unit
+    breedViewModel: BreedViewModel,
+    onSystemAction: (SystemAction) -> Unit,
 ) {
-    //val breedViewModel:BreedViewModel = koinViewModel()
-    val breeds: List<Breed>? by breedViewModel.state.collectAsState()
+
+    val uiState by breedViewModel.uiState.collectAsState()
+    val lazyListState = rememberLazyListState()
+
+    val reachedBottom: Boolean by remember {
+        derivedStateOf {
+            val lastVisibleItem = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()
+            lastVisibleItem != null && lastVisibleItem.index == uiState.breeds?.size?.minus(1)
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -64,24 +77,39 @@ fun BreedList(
             )
         },
          content = { paddingValues ->
-             LazyColumn(
-                 modifier = Modifier.fillMaxSize().padding(paddingValues),
-                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
-             ) {
-                 items(
-                     items = breeds as List<Breed?>,
-                     key = { it?.id ?: "" }
-                 ) {
-                     it?.let { breed ->
-                         BreedCard(
-                             breed = it,
-                             onClick = {
-                                 breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction))
+
+             when {
+                 uiState.breeds != null -> {
+                     LazyColumn(
+                         modifier = Modifier.fillMaxSize().padding(paddingValues),
+                         state = lazyListState,
+                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
+                     ) {
+                         items(
+                             items = uiState.breeds as List<Breed?>,
+                             key = { it?.id ?: "" }
+                         ) {
+                             it?.let { breed ->
+                                 BreedCard(
+                                     breed = it,
+                                     onClick = {
+                                         breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction))
+                                     }
+                                 )
                              }
-                         )
+                         }
                      }
                  }
+                 uiState.isError -> { TODO() }
              }
+
+             Loader(uiState.isLoading)
          }
     )
+
+    LaunchedEffect(reachedBottom) {
+        if (reachedBottom && !uiState.isLoading) {
+            breedViewModel.onAction(BreedAction.OnLoadBreeds)
+        }
+    }
 }
