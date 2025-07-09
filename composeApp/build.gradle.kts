@@ -42,6 +42,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlin.reflect)
+            implementation(libs.ktor.loging)
 
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -74,8 +75,6 @@ kotlin {
             implementation(libs.kotlinx.coroutinesSwing)
 
             implementation(libs.ktor.client.desktop)
-            implementation(libs.ktor.loging)
-
             implementation(libs.sqldelight.sqlite.driver)
         }
     }
