@@ -15,18 +15,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.ee.kmp.data.model.Breed
 import com.ee.kmp.ui.colorRed
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.error_svgrepo_com
-import kmp.composeapp.generated.resources.heart_straight_fill_svgrepo_com
 import kmp.composeapp.generated.resources.trash_alt_svgrepo_com
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
@@ -53,8 +52,10 @@ fun BreedCard(
         modifier = Modifier.padding(top = 8.dp),
         onClick = { onClick(breed) }
     ) {
-        Row(modifier = Modifier.padding(8.dp)) {
-
+        Row(
+            modifier = Modifier.padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             val imageModifier = Modifier
                 .weight(0.8f)
                 .aspectRatio(16f / 9f)

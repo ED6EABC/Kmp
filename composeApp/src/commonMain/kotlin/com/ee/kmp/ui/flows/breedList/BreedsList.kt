@@ -79,7 +79,7 @@ fun BreedList(
          content = { paddingValues ->
 
              LazyColumn(
-                 modifier = Modifier.fillMaxSize().padding(paddingValues),
+                 modifier = Modifier.padding(paddingValues),
                  state = lazyListState,
                  contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
              ) {

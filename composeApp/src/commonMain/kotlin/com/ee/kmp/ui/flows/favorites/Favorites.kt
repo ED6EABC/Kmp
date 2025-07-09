@@ -1,5 +1,6 @@
 package com.ee.kmp.ui.flows.favorites
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.ee.kmp.data.model.Breed
 import com.ee.kmp.ui.actions.SystemAction
 import com.ee.kmp.ui.composables.BreedCard
@@ -43,7 +45,8 @@ fun Favorites(onSystemAction: (SystemAction) -> Unit) {
         },
         content = { paddingValues ->
             LazyColumn(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
             ) {
                 items(
                     items = breeds as List<Breed?>,
