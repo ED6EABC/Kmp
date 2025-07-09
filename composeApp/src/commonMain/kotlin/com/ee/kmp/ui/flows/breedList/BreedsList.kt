@@ -59,7 +59,7 @@ fun BreedList(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CustomTopBar(
-                config = TopBarConfiguration.Default,
+                config = TopBarConfiguration(showBack = true, showFavorites = true),
                 onAction = { onSystemAction(SystemAction.Navigate(Routes.Favorites)) }
             )
         },
@@ -73,7 +73,7 @@ fun BreedList(
                      key = { it?.id ?: "" }
                  ) {
                      it?.let {
-                         BreedCard(it) { breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction)) }
+                         BreedCard(breed = it) { breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction)) }
                      }
                  }
              }

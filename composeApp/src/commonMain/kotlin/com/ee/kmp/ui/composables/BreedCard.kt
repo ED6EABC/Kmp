@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +16,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.ee.kmp.data.Breed
+import kmp.composeapp.generated.resources.Res
+import kmp.composeapp.generated.resources.heart_straight_fill_svgrepo_com
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
@@ -23,7 +28,11 @@ private fun BreedCardPreview() {
 }
 
 @Composable
-fun BreedCard(breed: Breed, onClick: (Breed) -> Unit) {
+fun BreedCard(
+    breedCardType: BreedCardType = BreedCardType.Breed,
+    breed: Breed,
+    onClick: (Breed) -> Unit = {}
+) {
     Card(
         modifier = Modifier.padding(top = 8.dp),
         onClick = { onClick(breed) }
@@ -50,6 +59,19 @@ fun BreedCard(breed: Breed, onClick: (Breed) -> Unit) {
                     )
                 }
             }
+
+            if(breedCardType is BreedCardType.BreedAsFavorite) {
+                IconButton(
+                    onClick = { /*TODO*/ },
+                ) {
+                    Icon(vectorResource(Res.drawable.heart_straight_fill_svgrepo_com), "")
+                }
+            }
         }
     }
+}
+
+sealed class BreedCardType() {
+    object Breed : BreedCardType()
+    object BreedAsFavorite : BreedCardType()
 }

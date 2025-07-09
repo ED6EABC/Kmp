@@ -1,7 +1,6 @@
 package com.ee.kmp.ui.flows.breedList
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.ee.kmp.ui.actions.SystemAction
@@ -47,7 +44,7 @@ fun BreedDetail(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CustomTopBar(
-                config = TopBarConfiguration.BackAndFavorites(breed?.name),
+                config = TopBarConfiguration(title = breed?.name, showBack = true, showFavorites = true),
                 onBack = { onSystemAction(SystemAction.NavigateBack) },
                 onAction = { onSystemAction(SystemAction.Navigate(Routes.Favorites)) }
             )

@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.back_svgrepo_com
 import kmp.composeapp.generated.resources.cats
+import kmp.composeapp.generated.resources.favorites
 import kmp.composeapp.generated.resources.heart_straight_fill_svgrepo_com
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -21,7 +22,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 private fun CustomTopBarPreview() {
     CustomTopBar(
-        TopBarConfiguration.Default,
+        TopBarConfiguration(null, showBack = true, showFavorites = true),
         {},
         {}
     )
@@ -32,19 +33,15 @@ private fun CustomTopBarPreview() {
 fun CustomTopBar(
     config: TopBarConfiguration,
     onBack: () -> Unit = {},
-    onAction: () -> Unit
+    onAction: () -> Unit = {}
 ) {
     TopAppBar(
         title = {
-            val label = if(config is TopBarConfiguration.BackAndFavorites) {
-                config.title ?: stringResource(Res.string.cats)
-            } else {
-                stringResource(Res.string.cats)
-            }
+            val label = config.title ?: stringResource(Res.string.cats)
             Text(text = label)
         },
         navigationIcon = {
-            if(config is TopBarConfiguration.BackAndFavorites)
+            if(config.showBack)
                 IconButton(
                     onClick = onBack,
                     modifier = Modifier.size(50.dp)
@@ -56,7 +53,7 @@ fun CustomTopBar(
                 }
         },
         actions = {
-            if(config is TopBarConfiguration.BackAndFavorites)
+            if(config.showFavorites)
                 IconButton(
                     onClick = onAction,
                     modifier = Modifier.size(50.dp)
@@ -70,7 +67,8 @@ fun CustomTopBar(
     )
 }
 
-sealed class TopBarConfiguration() {
-    object Default : TopBarConfiguration()
-    data class BackAndFavorites(val title: String?) : TopBarConfiguration()
-}
+data class TopBarConfiguration(
+    val title: String? = null,
+    val showBack: Boolean = false,
+    val showFavorites: Boolean = false
+)
