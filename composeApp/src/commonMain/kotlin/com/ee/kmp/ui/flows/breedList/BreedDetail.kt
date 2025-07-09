@@ -22,9 +22,11 @@ import coil3.compose.rememberAsyncImagePainter
 import com.ee.kmp.ui.actions.SystemAction
 import com.ee.kmp.ui.composables.CustomTopBar
 import com.ee.kmp.ui.composables.TopBarConfiguration
+import com.ee.kmp.ui.flows.login.BreedAction
 import com.ee.kmp.ui.navigation.Routes
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.error_svgrepo_com
+import kmp.composeapp.generated.resources.heart_like_favorite_svgrepo_com
 import kmp.composeapp.generated.resources.heart_straight_fill_svgrepo_com
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
@@ -35,16 +37,16 @@ fun BreedDetail(
     onSystemAction: (SystemAction) -> Unit
 ) {
 
-    val breed by breedViewModel.breedSelected.collectAsState()
+    val breedDetail by breedViewModel.breedSelected.collectAsState()
 
-    val painter = rememberAsyncImagePainter("https://cdn2.thecatapi.com/images/${breed?.referenceImageId}.jpg")
+    val painter = rememberAsyncImagePainter("https://cdn2.thecatapi.com/images/${breedDetail?.breed?.referenceImageId}.jpg")
     val state by painter.state.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CustomTopBar(
-                config = TopBarConfiguration(title = breed?.name, showBack = true, showFavorites = true),
+                config = TopBarConfiguration(title = breedDetail?.breed?.name, showBack = true, showFavorites = true),
                 onBack = { onSystemAction(SystemAction.NavigateBack) },
                 onAction = { onSystemAction(SystemAction.Navigate(Routes.Favorites)) }
             )
@@ -64,7 +66,7 @@ fun BreedDetail(
                     is AsyncImagePainter.State.Success -> {
                         Image(
                             painter = painter,
-                            contentDescription = breed?.name,
+                            contentDescription = breedDetail?.breed?.name,
                             modifier = Modifier
                                 .weight(0.8f)
                                 .aspectRatio(16f / 9f),
@@ -76,17 +78,24 @@ fun BreedDetail(
                     }
                 }
 
-                breed?.description?.let { Text(it) }
-                breed?.origin?.let { Text(it) }
-                breed?.temperament?.let { Text(it) }
-                breed?.lifeSpan?.let { Text(it) }
+                with(breedDetail?.breed) {
+                    this?.description?.let { Text(it) }
+                    this?.origin?.let { Text(it) }
+                    this?.temperament?.let { Text(it) }
+                    this?.lifeSpan?.let { Text(it) }
+                }
 
                 IconButton(
                     onClick = {
-
+                        breedDetail?.let { breedViewModel.onAction(BreedAction.OnSaveAsFavorite(it)) }
                     }
                 ) {
-                    Icon(imageVector = vectorResource(Res.drawable.heart_straight_fill_svgrepo_com), "Favorite")
+                    val icon = if(breedDetail?.isFavorite ?: false)
+                        Res.drawable.heart_straight_fill_svgrepo_com
+                    else
+                        Res.drawable.heart_like_favorite_svgrepo_com
+
+                    Icon(imageVector = vectorResource(icon), "Favorite")
                 }
             }
         }

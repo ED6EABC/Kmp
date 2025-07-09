@@ -11,7 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ee.kmp.data.Breed
+import com.ee.kmp.data.model.Breed
 import com.ee.kmp.di.dataModule
 import com.ee.kmp.di.domineModule
 import com.ee.kmp.di.platformDataModule
@@ -59,7 +59,7 @@ fun BreedList(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CustomTopBar(
-                config = TopBarConfiguration(showBack = true, showFavorites = true),
+                config = TopBarConfiguration(showBack = false, showFavorites = true),
                 onAction = { onSystemAction(SystemAction.Navigate(Routes.Favorites)) }
             )
         },
@@ -72,8 +72,13 @@ fun BreedList(
                      items = breeds as List<Breed?>,
                      key = { it?.id ?: "" }
                  ) {
-                     it?.let {
-                         BreedCard(breed = it) { breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction)) }
+                     it?.let { breed ->
+                         BreedCard(
+                             breed = it,
+                             onClick = {
+                                 breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction))
+                             }
+                         )
                      }
                  }
              }

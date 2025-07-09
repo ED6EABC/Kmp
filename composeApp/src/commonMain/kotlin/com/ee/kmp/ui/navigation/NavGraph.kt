@@ -55,7 +55,7 @@ fun NavGraph(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Favorites( listOf(),onSystemAction)
+                Favorites(onSystemAction)
             }
 
         }

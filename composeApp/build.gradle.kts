@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -40,6 +41,7 @@ kotlin {
             implementation(libs.ktor.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlin.reflect)
 
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -64,6 +66,7 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.loging.android)
+            implementation(libs.sqldelight.android.driver)
         }
 
         desktopMain.dependencies {
@@ -72,6 +75,8 @@ kotlin {
 
             implementation(libs.ktor.client.desktop)
             implementation(libs.ktor.loging)
+
+            implementation(libs.sqldelight.sqlite.driver)
         }
     }
 }
@@ -115,6 +120,14 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.ee.kmp"
             packageVersion = "1.0.0"
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("BreedsDataBase") {
+            packageName.set("com.breeds")
         }
     }
 }

@@ -1,13 +1,11 @@
-package com.ee.kmp.data
+package com.ee.kmp.data.remote
 
+import com.ee.kmp.data.model.Breed
 import com.ee.kmp.domine.MainRepository
 import io.ktor.client.HttpClient
-import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.path
 import kotlinx.serialization.json.Json
 
 class MainRepositoryImp(
@@ -17,21 +15,19 @@ class MainRepositoryImp(
 
     override suspend fun getData(): List<Breed>? {
         //api_key=live_gyX4Aur2uY2uZLQpYbwY5VN2hlrXQJU0uxmwbfdI9UFoU9dJcLnhuQ8qvHgvovTl&limit=10
-        val response = httpClient.get("https://api.thecatapi.com/v1/breeds")
-
-        println(response.status)
+        val response = httpClient.get(urlString = "https://api.thecatapi.com/v1/breeds")
 
         return when(response.status) {
-            HttpStatusCode.OK -> {
+            HttpStatusCode.Companion.OK -> {
                 json.decodeFromString<List<Breed>>(response.body<String>())
             }
-            HttpStatusCode.BadRequest -> {
+            HttpStatusCode.Companion.BadRequest -> {
                 null
             }
-            HttpStatusCode.InternalServerError -> {
+            HttpStatusCode.Companion.InternalServerError -> {
                 null
             }
-            HttpStatusCode.Unauthorized -> {
+            HttpStatusCode.Companion.Unauthorized -> {
                 null
             }
             else -> {

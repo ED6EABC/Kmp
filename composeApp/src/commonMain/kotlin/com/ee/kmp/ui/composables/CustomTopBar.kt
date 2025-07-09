@@ -9,6 +9,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ee.kmp.ui.colorRed
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.back_svgrepo_com
 import kmp.composeapp.generated.resources.cats
@@ -60,7 +61,8 @@ fun CustomTopBar(
                 ) {
                     Icon(
                         imageVector = vectorResource(Res.drawable.heart_straight_fill_svgrepo_com),
-                        contentDescription = "Favorites"
+                        contentDescription = "Favorites",
+                        tint = colorRed
                     )
                 }
         }

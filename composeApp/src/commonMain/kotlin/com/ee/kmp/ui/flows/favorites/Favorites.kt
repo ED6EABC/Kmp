@@ -6,28 +6,38 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.ee.kmp.data.Breed
+import com.ee.kmp.data.model.Breed
 import com.ee.kmp.ui.actions.SystemAction
 import com.ee.kmp.ui.composables.BreedCard
 import com.ee.kmp.ui.composables.BreedCardType
 import com.ee.kmp.ui.composables.CustomTopBar
 import com.ee.kmp.ui.composables.TopBarConfiguration
+import kmp.composeapp.generated.resources.Res
+import kmp.composeapp.generated.resources.favorites
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 @Preview
 @Composable
 private fun AppPreview() {
-    Favorites(null) {}
+    Favorites() {}
 }
 
 @Composable
-fun Favorites(breeds: List<Breed>?, onSystemAction: (SystemAction) -> Unit) {
+fun Favorites(onSystemAction: (SystemAction) -> Unit) {
+
+    val viewModel = koinViewModel<FavoritesViewModel>()
+    val breeds by viewModel.state.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CustomTopBar(
-                config = TopBarConfiguration(showBack = true),
+                config = TopBarConfiguration(title = stringResource(Res.string.favorites), showBack = true),
                 onBack = { onSystemAction(SystemAction.NavigateBack) },
             )
         },
@@ -40,9 +50,13 @@ fun Favorites(breeds: List<Breed>?, onSystemAction: (SystemAction) -> Unit) {
                     key = { it?.id ?: "" }
                 ) {
                     it?.let {
-                        BreedCard(BreedCardType.BreedAsFavorite, it) {
-                            //TODO delete
-                        }
+                        BreedCard(
+                            breedCardType = BreedCardType.BreedAsFavorite,
+                            breed = it,
+                            onDelete = { id ->
+                                viewModel.onAction(FavoritesAction.RemoveFavorite(id))
+                            }
+                        )
                     }
                 }
             }

@@ -15,9 +15,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.ee.kmp.data.Breed
+import com.ee.kmp.data.model.Breed
+import com.ee.kmp.ui.colorRed
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.heart_straight_fill_svgrepo_com
+import kmp.composeapp.generated.resources.trash_alt_svgrepo_com
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -31,7 +33,8 @@ private fun BreedCardPreview() {
 fun BreedCard(
     breedCardType: BreedCardType = BreedCardType.Breed,
     breed: Breed,
-    onClick: (Breed) -> Unit = {}
+    onClick: (Breed) -> Unit = {},
+    onDelete: (String) -> Unit = {}
 ) {
     Card(
         modifier = Modifier.padding(top = 8.dp),
@@ -41,30 +44,33 @@ fun BreedCard(
             AsyncImage(
                 model = "https://cdn2.thecatapi.com/images/${breed.referenceImageId}.jpg",
                 contentDescription = breed.name,
-                modifier = Modifier.size(50.dp),
+                modifier = Modifier.size(50.dp).weight(1f),
                 contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.size(8.dp))
 
-            Column {
-                breed.name?.let {
-                    Text(it)
-                }
-                breed.description?.let {
-                    Text(
-                        text = it,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 2
-                    )
-                }
+            Column(
+                modifier = Modifier.weight(3f)
+            ) {
+                Text(breed.name)
+                Text(
+                    text = breed.description,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2
+                )
             }
 
             if(breedCardType is BreedCardType.BreedAsFavorite) {
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { onDelete(breed.id) },
+                    modifier = Modifier.size(50.dp).weight(1f)
                 ) {
-                    Icon(vectorResource(Res.drawable.heart_straight_fill_svgrepo_com), "")
+                    Icon(
+                        vectorResource(Res.drawable.trash_alt_svgrepo_com),
+                        "Delete from favorites",
+                        tint = colorRed
+                    )
                 }
             }
         }

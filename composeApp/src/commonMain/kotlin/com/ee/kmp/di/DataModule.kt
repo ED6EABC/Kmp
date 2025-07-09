@@ -1,6 +1,8 @@
 package com.ee.kmp.di
 
-import com.ee.kmp.data.MainRepositoryImp
+import com.breeds.BreedsDataBase
+import com.ee.kmp.data.local.DataBaseFactory
+import com.ee.kmp.data.remote.MainRepositoryImp
 import com.ee.kmp.domine.MainRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.defaultRequest
@@ -25,7 +27,6 @@ val dataModule = module {
         }
     }
 
-    //Here we need to provides the platform module for each system
     singleOf(::MainRepositoryImp) { bind<MainRepository>() }
 
     factory {
@@ -35,4 +36,6 @@ val dataModule = module {
             ignoreUnknownKeys = true
         }
     }
+
+    single<BreedsDataBase> { DataBaseFactory(get()).invoke() }
 }
