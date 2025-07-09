@@ -1,5 +1,6 @@
 package com.ee.kmp.di
 
+import com.ee.kmp.domine.useCases.FindFavoriteUseCase
 import com.ee.kmp.domine.useCases.GetBreedsUseCase
 import com.ee.kmp.domine.useCases.GetFavoritesUseCase
 import com.ee.kmp.domine.useCases.RemoveFavoriteUseCase
@@ -12,4 +13,5 @@ val domineModule = module {
     factoryOf(::SaveFavoriteUseCase)
     factoryOf(::GetFavoritesUseCase)
     factoryOf(::RemoveFavoriteUseCase)
+    factoryOf(::FindFavoriteUseCase)
 }

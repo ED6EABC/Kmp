@@ -3,10 +3,10 @@ package com.ee.kmp.ui.flows.breedList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ee.kmp.data.model.Breed
+import com.ee.kmp.domine.useCases.FindFavoriteUseCase
 import com.ee.kmp.domine.useCases.GetBreedsUseCase
 import com.ee.kmp.domine.useCases.RemoveFavoriteUseCase
 import com.ee.kmp.domine.useCases.SaveFavoriteUseCase
-import com.ee.kmp.ui.actions.SystemAction
 import com.ee.kmp.ui.actions.SystemAction.*
 import com.ee.kmp.ui.flows.login.BreedAction
 import com.ee.kmp.ui.navigation.Routes
@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
 class BreedViewModel(
     private val getBreedsUseCase: GetBreedsUseCase,
     private val saveFavoriteUseCase: SaveFavoriteUseCase,
-    private val removeFavoriteUseCase: RemoveFavoriteUseCase
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
+    private val findFavoriteUseCase: FindFavoriteUseCase
 ): ViewModel() {
 
     init { onAction(BreedAction.OnLoadBreeds) }
@@ -48,10 +49,15 @@ class BreedViewModel(
         }
     }
 
+    private fun onBreedSelected(breed: Breed) {
+        val isFavorite = findFavoriteUseCase.invoke(breed.id).executeAsOne()
+        breedSelected.update { BreedDetail(breed, isFavorite) }
+    }
+
     fun onAction(action: BreedAction) {
         when(action){
             is BreedAction.OnBreedSelected -> {
-                breedSelected.update { BreedDetail(action.breed) }
+                onBreedSelected(action.breed)
                 action.onSystemAction(Navigate(Routes.BreedDetail))
             }
             BreedAction.OnLoadBreeds -> getData()

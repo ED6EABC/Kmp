@@ -88,3 +88,6 @@ INSERT INTO FavoritesBreedsTable(
  removeFavoriteBreed:
  DELETE FROM FavoritesBreedsTable
  WHERE id = ?;
+
+ isFavorite:
+SELECT EXISTS(SELECT 1 FROM FavoritesBreedsTable WHERE id = :itemId);
