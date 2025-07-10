@@ -21,7 +21,7 @@ class SplashViewModel(
 
     private fun validateSession() {
         setLoaderState(true)
-        _uiState.update { SplashUiState(isUserLogged = false) }//loginUseCase.invoke().executeAsOne()
+        _uiState.update { SplashUiState(isUserLogged = loginUseCase.invoke().executeAsOne()) }
         setLoaderState(false)
     }
 
