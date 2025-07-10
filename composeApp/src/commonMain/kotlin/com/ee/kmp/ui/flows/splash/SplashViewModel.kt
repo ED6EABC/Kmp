@@ -10,7 +10,7 @@ class SplashViewModel(
     private val loginUseCase: LoginUseCase
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(AppUiState())
+    private val _uiState = MutableStateFlow(SplashUiState())
     val uiState = _uiState.asStateFlow()
 
     init { validateSession() }
@@ -21,13 +21,13 @@ class SplashViewModel(
 
     private fun validateSession() {
         setLoaderState(true)
-        _uiState.update { AppUiState(isUserLogged = loginUseCase.invoke().executeAsOne()) }
+        _uiState.update { SplashUiState(isUserLogged = false) }//loginUseCase.invoke().executeAsOne()
         setLoaderState(false)
     }
 
 }
 
-data class AppUiState(
+data class SplashUiState(
     var isUserLogged: Boolean? = null,
     var isLoading: Boolean = true
 )

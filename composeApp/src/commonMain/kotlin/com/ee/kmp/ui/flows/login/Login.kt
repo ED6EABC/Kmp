@@ -55,7 +55,7 @@ fun Login(onSystemAction: (SystemAction) -> Unit) {
                 Text(stringResource(Res.string.nameLabel))
             },
             isError = uiState.username.isError,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
         Spacer(Modifier.height(18.dp))
         TextField(
@@ -70,14 +70,16 @@ fun Login(onSystemAction: (SystemAction) -> Unit) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = PasswordVisualTransformation()
         )
-
         Spacer(Modifier.weight(1f))
-
         TextButton(
             onClick = {
-                loginViewModel.onAction(
-                    LoginAction.Login(onSystemAction)
-                )
+                if(!uiState.userPassword.isError &&
+                    !uiState.username.isError &&
+                    uiState.userPassword.value.isNotEmpty() &&
+                    uiState.username.value.isNotEmpty()
+                ) {
+                    loginViewModel.onAction(LoginAction.Login(onSystemAction))
+                }
             },
            modifier = Modifier.height(60.dp)
         ) {

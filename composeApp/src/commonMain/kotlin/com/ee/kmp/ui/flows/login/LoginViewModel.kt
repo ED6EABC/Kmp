@@ -9,6 +9,8 @@ import com.ee.kmp.ui.flows.login.model.InputState
 import com.ee.kmp.ui.flows.login.model.LoginAction
 import com.ee.kmp.ui.flows.login.model.LoginUiState
 import com.ee.kmp.ui.navigation.Routes
+import com.ee.kmp.ui.utils.isValidPassword
+import com.ee.kmp.ui.utils.isValidUsername
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,8 +48,14 @@ class LoginViewModel(
                     )
                 }
             }
-            is LoginAction.PasswordChanged -> _uiState.update { _uiState.value.copy( userPassword = action.password ) }
-            is LoginAction.UsernameChanged -> _uiState.update { _uiState.value.copy( username = action.name ) }
+            is LoginAction.PasswordChanged -> _uiState.update {
+                val isError = action.password.value.isEmpty() || !isValidPassword(action.password.value)
+                _uiState.value.copy( userPassword = InputState(action.password.value, isError))
+            }
+            is LoginAction.UsernameChanged -> _uiState.update {
+                val isError = action.name.value.isEmpty() || !isValidUsername(action.name.value)
+                _uiState.value.copy( username = InputState(action.name.value, isError))
+            }
         }
     }
 
