@@ -127,6 +127,7 @@ sqldelight {
     databases {
         create("BreedsDataBase") {
             packageName.set("com.breeds")
+            generateAsync.set(true)
         }
     }
 }

@@ -8,7 +8,7 @@ class GetFavoritesUseCase(
     private val breedsDataBase: BreedsDataBase
 ) {
     fun invoke(): List<Breed> {
-        return breedsDataBase.breedsTableQueries.reedAllFavoritesBreeds()
+        return breedsDataBase.breedTableQueries.reedAllFavoritesBreeds()
             .executeAsList()
             .map {
                 (   id,

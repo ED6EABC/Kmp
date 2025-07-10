@@ -14,13 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ee.kmp.ui.colorOrange
 import com.ee.kmp.ui.colorRed
+import com.ee.kmp.ui.colorWhite
 
 @Composable
-fun Loader(loading: Boolean) {
+fun Loader(
+    loading: Boolean,
+    showBackground: Boolean = false
+) {
     if(loading) {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background.copy(alpha = 0.5F)
+            color = if(showBackground) colorWhite else MaterialTheme.colorScheme.background.copy(alpha = 0.5F)
         ) {
             Column (
                 modifier = Modifier.fillMaxSize(),

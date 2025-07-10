@@ -1,4 +1,4 @@
-CREATE TABLE FavoritesBreedsTable (
+CREATE TABLE FavoritesBreeds (
     id TEXT PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
     cfa_url TEXT NOT NULL,
@@ -40,11 +40,11 @@ CREATE TABLE FavoritesBreedsTable (
 );
 
 reedAllFavoritesBreeds:
-SELECT FavoritesBreedsTable.*
-FROM FavoritesBreedsTable;
+SELECT FavoritesBreeds.*
+FROM FavoritesBreeds;
 
 insetFaoriteBreed:
-INSERT INTO FavoritesBreedsTable(
+INSERT INTO FavoritesBreeds(
     id,
     name,
     cfa_url,
@@ -85,9 +85,9 @@ INSERT INTO FavoritesBreedsTable(
     weight_metric
  ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?);
 
- removeFavoriteBreed:
- DELETE FROM FavoritesBreedsTable
- WHERE id = ?;
+removeFavoriteBreed:
+DELETE FROM FavoritesBreeds
+WHERE id = ?;
 
- isFavorite:
-SELECT EXISTS(SELECT 1 FROM FavoritesBreedsTable WHERE id = :itemId);
+isFavorite:
+SELECT EXISTS(SELECT 1 FROM FavoritesBreeds WHERE id = :itemId);

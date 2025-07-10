@@ -10,7 +10,7 @@ import com.ee.kmp.domine.useCases.GetBreedsUseCase
 import com.ee.kmp.domine.useCases.RemoveFavoriteUseCase
 import com.ee.kmp.domine.useCases.SaveFavoriteUseCase
 import com.ee.kmp.ui.actions.SystemAction.*
-import com.ee.kmp.ui.flows.login.BreedAction
+import com.ee.kmp.ui.flows.breedList.model.BreedAction
 import com.ee.kmp.ui.navigation.Routes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
