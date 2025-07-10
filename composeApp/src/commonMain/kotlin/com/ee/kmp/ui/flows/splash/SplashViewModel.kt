@@ -25,7 +25,7 @@ class SplashViewModel(
         val isUserLogged = try {
             loginUseCase.invoke().executeAsOne()
             true
-        } catch (e: NullPointerException) {
+        } catch (_: NullPointerException) {
             false
         }
 
