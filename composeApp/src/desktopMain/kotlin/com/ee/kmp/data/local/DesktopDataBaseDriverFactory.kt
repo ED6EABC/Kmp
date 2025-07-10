@@ -7,6 +7,6 @@ import java.util.Properties
 
 class DesktopDataBaseDriverFactory(): DatabaseDriverFactory {
     override fun createDriver(): SqlDriver {
-        return  JdbcSqliteDriver("jdbc:sqlite:FavoritesBreedsTable.db", Properties(), BreedsDataBase.Schema)
+        return  JdbcSqliteDriver("jdbc:sqlite:BreedsTable.db", Properties(), BreedsDataBase.Schema)
     }
 }

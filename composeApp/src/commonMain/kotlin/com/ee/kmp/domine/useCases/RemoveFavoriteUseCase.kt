@@ -5,7 +5,5 @@ import com.breeds.BreedsDataBase
 class RemoveFavoriteUseCase(
     private val breedsDataBase: BreedsDataBase
 ) {
-    fun invoke(breedId: String) {
-        breedsDataBase.breedsDataBaseQueries.removeFavoriteBreed(breedId)
-    }
+    fun invoke(breedId: String) = breedsDataBase.breedsTableQueries.removeFavoriteBreed(breedId)
 }

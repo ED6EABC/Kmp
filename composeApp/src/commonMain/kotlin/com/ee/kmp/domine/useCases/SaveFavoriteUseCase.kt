@@ -7,7 +7,7 @@ class SaveFavoriteUseCase(
     private val breedsDataBase: BreedsDataBase
 ) {
     fun invoke(breed: Breed) {
-        breedsDataBase.breedsDataBaseQueries.insetFaoriteBreed(
+        breedsDataBase.breedsTableQueries.insetFaoriteBreed(
             id = breed.id,
             name = breed.name,
             cfa_url = breed.cfaUrl,
