@@ -5,5 +5,5 @@ import com.breeds.BreedsDataBase
 class LoginUseCase(
     private val breedsDataBase: BreedsDataBase
 ) {
-    fun invoke() = breedsDataBase.usersTableQueries.isUserLogged()
+    fun invoke() = breedsDataBase.usersTableQueries.isUserLogged(KEY_INDEX)
 }
