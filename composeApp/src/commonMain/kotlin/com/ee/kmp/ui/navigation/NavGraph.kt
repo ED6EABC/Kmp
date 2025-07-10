@@ -17,6 +17,7 @@ import com.ee.kmp.ui.flows.breedList.BreedDetail
 import com.ee.kmp.ui.flows.breedList.BreedList
 import com.ee.kmp.ui.flows.favorites.Favorites
 import com.ee.kmp.ui.flows.login.Login
+import com.ee.kmp.ui.flows.splash.Splash
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -28,9 +29,12 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.path,
+        startDestination = Routes.Splash.path,
         modifier = Modifier.padding(padding)
     ) {
+        composable(Routes.Splash.path) {
+            Splash(onSystemAction)
+        }
         composable(Routes.Login.path) {
             Login(onSystemAction)
         }

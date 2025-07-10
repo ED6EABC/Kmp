@@ -2,8 +2,8 @@ package com.ee.kmp.domine.useCases
 
 import com.breeds.BreedsDataBase
 
-class FindFavoriteUseCase(
+class LoginUseCase(
     private val breedsDataBase: BreedsDataBase
 ) {
-    fun invoke(breedId: String) = breedsDataBase.breedTableQueries.isFavorite(breedId)
+    fun invoke() = breedsDataBase.usersTableQueries.isUserLogged()
 }

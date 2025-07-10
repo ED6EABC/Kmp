@@ -18,6 +18,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.ee.kmp.ui.actions.SystemAction
+import com.ee.kmp.ui.composables.Loader
+import com.ee.kmp.ui.flows.login.model.InputState
+import com.ee.kmp.ui.flows.login.model.LoginAction
 import kmp.composeapp.generated.resources.Login
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.nameLabel
@@ -27,14 +30,14 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 private fun LoginPreview() {
-    Login(){}
+    Login{}
 }
 
 @Composable
 fun Login(onSystemAction: (SystemAction) -> Unit) {
 
     val loginViewModel = koinViewModel<LoginViewModel>()
-    val uiState by loginViewModel.state.collectAsState()
+    val uiState by loginViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -81,5 +84,7 @@ fun Login(onSystemAction: (SystemAction) -> Unit) {
             Text(text = stringResource(Res.string.Login))
         }
         Spacer(Modifier.height(18.dp))
+
+        Loader(uiState.isLoading)
     }
 }

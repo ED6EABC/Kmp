@@ -1,4 +1,4 @@
-package com.ee.kmp.ui.flows.login
+package com.ee.kmp.ui.flows.breedList.model
 
 import com.ee.kmp.data.model.Breed
 import com.ee.kmp.ui.actions.SystemAction

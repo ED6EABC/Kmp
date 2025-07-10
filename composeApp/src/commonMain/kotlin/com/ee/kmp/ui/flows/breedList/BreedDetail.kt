@@ -22,7 +22,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.ee.kmp.ui.actions.SystemAction
 import com.ee.kmp.ui.composables.CustomTopBar
 import com.ee.kmp.ui.composables.TopBarConfiguration
-import com.ee.kmp.ui.flows.login.BreedAction
+import com.ee.kmp.ui.flows.breedList.model.BreedAction
 import com.ee.kmp.ui.navigation.Routes
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.error_svgrepo_com

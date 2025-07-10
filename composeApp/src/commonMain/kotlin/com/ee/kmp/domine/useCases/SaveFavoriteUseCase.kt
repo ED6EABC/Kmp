@@ -6,8 +6,8 @@ import com.ee.kmp.data.model.Breed
 class SaveFavoriteUseCase(
     private val breedsDataBase: BreedsDataBase
 ) {
-    fun invoke(breed: Breed) {
-        breedsDataBase.breedsTableQueries.insetFaoriteBreed(
+    suspend fun invoke(breed: Breed) {
+        breedsDataBase.breedTableQueries.insetFaoriteBreed(
             id = breed.id,
             name = breed.name,
             cfa_url = breed.cfaUrl,

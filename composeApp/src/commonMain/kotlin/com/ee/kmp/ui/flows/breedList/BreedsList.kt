@@ -25,7 +25,7 @@ import com.ee.kmp.ui.composables.BreedCard
 import com.ee.kmp.ui.composables.CustomTopBar
 import com.ee.kmp.ui.composables.Loader
 import com.ee.kmp.ui.composables.TopBarConfiguration
-import com.ee.kmp.ui.flows.login.BreedAction
+import com.ee.kmp.ui.flows.breedList.model.BreedAction
 import com.ee.kmp.ui.navigation.Routes
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplicationPreview
