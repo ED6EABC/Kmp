@@ -1,5 +1,7 @@
 package com.ee.kmp.ui.composables
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -8,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ee.kmp.ui.colorRed
 import kmp.composeapp.generated.resources.Res
@@ -39,13 +42,18 @@ fun CustomTopBar(
     TopAppBar(
         title = {
             val label = config.title ?: stringResource(Res.string.cats)
-            Text(text = label)
+            Text(
+                text = label,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         },
+        modifier = Modifier.padding(horizontal = 8.dp),
         navigationIcon = {
             if(config.showBack)
                 IconButton(
                     onClick = onBack,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(24.dp)
                 ) {
                     Icon(
                         imageVector = vectorResource(Res.drawable.back_svgrepo_com),
@@ -57,7 +65,7 @@ fun CustomTopBar(
             if(config.showFavorites)
                 IconButton(
                     onClick = onAction,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(24.dp)
                 ) {
                     Icon(
                         imageVector = vectorResource(Res.drawable.heart_straight_fill_svgrepo_com),

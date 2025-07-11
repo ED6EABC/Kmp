@@ -9,4 +9,8 @@
 
     <string name="requestError">Algo salio mal...</string>
     <string name="requestAction">Reintentar</string>
+
+    <string name="origin">Origen:</string>
+    <string name="temperament">Temperamento:</string>
+    <string name="lifeSpan">Esperanza de vida:</string>
 </resources>
