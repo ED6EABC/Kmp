@@ -12,17 +12,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ee.kmp.data.model.Breed
-import com.ee.kmp.di.dataModule
-import com.ee.kmp.di.domineModule
-import com.ee.kmp.di.platformDataModule
-import com.ee.kmp.di.presentationModule
 import com.ee.kmp.ui.actions.SystemAction
 import com.ee.kmp.ui.composables.BreedCard
 import com.ee.kmp.ui.composables.CustomTopBar
@@ -35,39 +30,32 @@ import kmp.composeapp.generated.resources.requestAction
 import kmp.composeapp.generated.resources.requestError
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.KoinApplicationPreview
-import org.koin.compose.viewmodel.koinViewModel
 
 @Preview
 @Composable
 private fun BreedListPreview() {
-    KoinApplicationPreview(
-        application = {
-            modules(
-                platformDataModule,
-
-                dataModule,
-                domineModule,
-                presentationModule
-            )
-        }
-    ) {
-        BreedList(
-            breedViewModel = koinViewModel(),
-            onSystemAction = {}
-        )
-    }
+    BreedList(
+        uiState = UiState(
+            breeds = mutableListOf(),
+            isLoading = false,
+            page = 0,
+            error = NetworkError(),
+            isReachLimit = false
+        ),
+        onSystemAction = {},
+        onAction = {}
+    )
 }
 
 @Composable
 fun BreedList(
-    breedViewModel: BreedViewModel,
+    uiState: UiState,
     onSystemAction: (SystemAction) -> Unit,
+    onAction: (BreedAction) -> Unit
 ) {
 
-    val uiState by breedViewModel.uiState.collectAsState()
     val lazyListState = rememberLazyListState()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
     val snackBarLabel = stringResource(Res.string.requestError)
     val snackBarActionLabel = stringResource(Res.string.requestAction)
 
@@ -87,35 +75,33 @@ fun BreedList(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
+            SnackbarHost(hostState = snackBarHostState)
         },
-         content = { paddingValues ->
-             LazyColumn(
-                 modifier = Modifier.padding(paddingValues),
-                 state = lazyListState,
-                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
-             ) {
-                 items(
-                     items = uiState.breeds as List<Breed?>,
-                     key = { it?.id ?: "" }
-                 ) {
-                     it?.let { breed ->
-                         BreedCard(
-                             breed = it,
-                             onClick = {
-                                 breedViewModel.onAction(BreedAction.OnBreedSelected(it, onSystemAction))
-                             }
-                         )
-                     }
-                 }
-             }
-             Loader(uiState.isLoading)
-         }
+        content = { paddingValues ->
+            LazyColumn(
+                modifier = Modifier.padding(paddingValues),
+                state = lazyListState,
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp)
+            ) {
+                items(
+                    items = uiState.breeds as List<Breed?>,
+                    key = { it?.id ?: "" }
+                ) {
+                    it?.let { breed ->
+                        BreedCard(
+                            breed = it,
+                            onClick = { onAction(BreedAction.OnBreedSelected(it, onSystemAction)) }
+                        )
+                    }
+                }
+            }
+            Loader(uiState.isLoading)
+        }
     )
 
     LaunchedEffect(uiState.error.isError) {
         if(uiState.error.isError) {
-            val snackBarResult = snackbarHostState.showSnackbar(
+            val snackBarResult = snackBarHostState.showSnackbar(
                 message = snackBarLabel,
                 actionLabel = snackBarActionLabel,
                 withDismissAction = false,
@@ -123,14 +109,15 @@ fun BreedList(
             )
 
             if(snackBarResult == SnackbarResult.ActionPerformed) {
-                breedViewModel.onAction(BreedAction.OnLoadBreeds)
+                onAction(BreedAction.OnLoadBreeds)
             }
         }
     }
 
     LaunchedEffect(reachedBottom) {
         if (reachedBottom && !uiState.isLoading && !uiState.isReachLimit) {
-            breedViewModel.onAction(BreedAction.OnLoadBreeds)
+            onAction(BreedAction.OnLoadBreeds)
         }
     }
+
 }

@@ -48,7 +48,14 @@ fun NavGraph(
                 navController.getBackStackEntry(Routes.BreedsList.path)
             }
 
-            BreedList(koinViewModel(viewModelStoreOwner = parentEntry), onSystemAction)
+            val viewModel: BreedViewModel = koinViewModel(viewModelStoreOwner = parentEntry)
+            val uiState by viewModel.uiState.collectAsState()
+
+            BreedList(
+                uiState = uiState,
+                onSystemAction = onSystemAction,
+                onAction = viewModel::onAction
+            )
         }
         composable(Routes.BreedDetail.path) {
 
@@ -63,7 +70,7 @@ fun NavGraph(
                 BreedDetail(
                     breedDetail = breedDetail,
                     onSystemAction = onSystemAction,
-                    onSave = { viewModel.onAction(BreedAction.OnSaveAsFavorite(it)) }
+                    onAction = viewModel::onAction
                 )
             }
         }

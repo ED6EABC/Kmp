@@ -34,6 +34,7 @@ import com.ee.kmp.ui.colorBlue
 import com.ee.kmp.ui.colorRed
 import com.ee.kmp.ui.composables.CustomTopBar
 import com.ee.kmp.ui.composables.TopBarConfiguration
+import com.ee.kmp.ui.flows.breedList.model.BreedAction
 import com.ee.kmp.ui.navigation.Routes
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.error_svgrepo_com
@@ -67,7 +68,7 @@ private fun BreedDetailPreview() {
 fun BreedDetail(
     breedDetail: BreedDetail,
     onSystemAction: (SystemAction) -> Unit,
-    onSave: (BreedDetail) -> Unit
+    onAction: (BreedAction) -> Unit
 ) {
 
     val painter = rememberAsyncImagePainter("https://cdn2.thecatapi.com/images/${breedDetail.breed.referenceImageId}.jpg")
@@ -84,7 +85,7 @@ fun BreedDetail(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onSave(breedDetail) },
+                onClick = { onAction(BreedAction.OnSaveAsFavorite(breedDetail)) },
                 modifier = Modifier.padding(16.dp),
                 containerColor = colorBlue,
                 contentColor = Color.White
