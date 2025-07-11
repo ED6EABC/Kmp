@@ -44,7 +44,6 @@ fun Login(onSystemAction: (SystemAction) -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Spacer(Modifier.height(18.dp))
         TextField(
             value = uiState.username.value,

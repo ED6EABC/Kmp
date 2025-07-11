@@ -26,7 +26,6 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun NavGraph(
-    padding: PaddingValues,
     navController: NavHostController,
     onSystemAction: (SystemAction) -> Unit
 ) {
@@ -34,7 +33,7 @@ fun NavGraph(
     NavHost(
         navController = navController,
         startDestination = Routes.Splash.path,
-        modifier = Modifier.padding(padding)
+        modifier = Modifier.fillMaxSize()
     ) {
         composable(Routes.Splash.path) {
             Splash(onSystemAction)

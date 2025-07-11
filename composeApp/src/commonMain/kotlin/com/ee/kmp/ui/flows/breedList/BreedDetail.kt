@@ -122,6 +122,7 @@ fun BreedDetail(
                             painter = painter,
                             contentDescription = breedDetail.breed.name,
                             modifier = Modifier
+                                .padding(top = 16.dp)
                                 .fillMaxWidth()
                                 .height(200.dp)
                                 .clip(

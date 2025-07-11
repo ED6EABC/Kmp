@@ -1,5 +1,6 @@
 package com.ee.kmp.ui.composables
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,7 +17,6 @@ import com.ee.kmp.ui.colorRed
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.back_svgrepo_com
 import kmp.composeapp.generated.resources.cats
-import kmp.composeapp.generated.resources.favorites
 import kmp.composeapp.generated.resources.heart_straight_fill_svgrepo_com
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -48,9 +48,8 @@ fun CustomTopBar(
                 textAlign = TextAlign.Center
             )
         },
-        modifier = Modifier.padding(horizontal = 8.dp),
         navigationIcon = {
-            if(config.showBack)
+            if(config.showBack) {
                 IconButton(
                     onClick = onBack,
                     modifier = Modifier.size(24.dp)
@@ -60,9 +59,10 @@ fun CustomTopBar(
                         contentDescription = "Back"
                     )
                 }
+            }
         },
         actions = {
-            if(config.showFavorites)
+            if(config.showFavorites) {
                 IconButton(
                     onClick = onAction,
                     modifier = Modifier.size(24.dp)
@@ -73,6 +73,7 @@ fun CustomTopBar(
                         tint = colorRed
                     )
                 }
+            }
         }
     )
 }
