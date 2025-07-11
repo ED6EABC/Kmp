@@ -13,44 +13,36 @@ class MainRepositoryImp(
     private val httpClient: HttpClient
 ): MainRepository {
 
-    override suspend fun getData(request: APIs.Breeds.Request): APIs.Breeds.Response {
+    override suspend fun getData(request: APIs.Breeds.Request): HttpResponse<APIs.Breeds.Response> {
 
-        val response = httpClient.get(urlString = APIs.Breeds.url) {
-            parameter("page", request.page)
-            parameter("limit", request.limit)
-        }
+        return try {
+            val response = httpClient.get(urlString = APIs.Breeds.url) {
+                parameter("page", request.page)
+                parameter("limit", request.limit)
+            }
 
-        return when(response.status) {
-            HttpStatusCode.Companion.OK -> {
-                APIs.Breeds.Response(
-                    response.body<List<Breed>>(),
-                    response.headers["pagination-count"]?.toInt() ?: 0
-                )
+            when(response.status) {
+                HttpStatusCode.Companion.OK -> {
+                    HttpResponse.Success(
+                        APIs.Breeds.Response(
+                            response.body<List<Breed>>(),
+                            response.headers["pagination-count"]?.toInt() ?: 0
+                        )
+                    )
+                }
+                HttpStatusCode.Companion.BadRequest, HttpStatusCode.Companion.Unauthorized  -> {
+                    HttpResponse.Error(
+                        response.status.value,
+                        response.body()
+                    )
+                }
+                else -> {
+                    HttpResponse.Exception
+                }
             }
-            HttpStatusCode.Companion.BadRequest -> {
-                APIs.Breeds.Response(
-                    listOf(),
-                    0
-                )
-            }
-            HttpStatusCode.Companion.InternalServerError -> {
-                APIs.Breeds.Response(
-                    listOf(),
-                    0
-                )
-            }
-            HttpStatusCode.Companion.Unauthorized -> {
-                APIs.Breeds.Response(
-                    listOf(),
-                    0
-                )
-            }
-            else -> {
-                APIs.Breeds.Response(
-                    listOf(),
-                    0
-                )
-            }
+
+        } catch (_: Exception) {
+            HttpResponse.Exception
         }
     }
 

@@ -7,6 +7,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,6 +30,10 @@ import com.ee.kmp.ui.composables.Loader
 import com.ee.kmp.ui.composables.TopBarConfiguration
 import com.ee.kmp.ui.flows.breedList.model.BreedAction
 import com.ee.kmp.ui.navigation.Routes
+import kmp.composeapp.generated.resources.Res
+import kmp.composeapp.generated.resources.requestAction
+import kmp.composeapp.generated.resources.requestError
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplicationPreview
 import org.koin.compose.viewmodel.koinViewModel
@@ -60,11 +67,14 @@ fun BreedList(
 
     val uiState by breedViewModel.uiState.collectAsState()
     val lazyListState = rememberLazyListState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarLabel = stringResource(Res.string.requestError)
+    val snackBarActionLabel = stringResource(Res.string.requestAction)
 
     val reachedBottom: Boolean by remember {
         derivedStateOf {
             val lastVisibleItem = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()
-            lastVisibleItem != null && lastVisibleItem.index == uiState.breeds?.size?.minus(1)
+            lastVisibleItem != null && lastVisibleItem.index == uiState.breeds.size.minus(1)
         }
     }
 
@@ -76,8 +86,10 @@ fun BreedList(
                 onAction = { onSystemAction(SystemAction.Navigate(Routes.Favorites)) }
             )
         },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
          content = { paddingValues ->
-
              LazyColumn(
                  modifier = Modifier.padding(paddingValues),
                  state = lazyListState,
@@ -97,14 +109,24 @@ fun BreedList(
                      }
                  }
              }
-
-             if(uiState.isError) {
-                 TODO()
-             }
-
              Loader(uiState.isLoading)
          }
     )
+
+    LaunchedEffect(uiState.error.isError) {
+        if(uiState.error.isError) {
+            val snackBarResult = snackbarHostState.showSnackbar(
+                message = snackBarLabel,
+                actionLabel = snackBarActionLabel,
+                withDismissAction = false,
+                duration = androidx.compose.material3.SnackbarDuration.Indefinite
+            )
+
+            if(snackBarResult == SnackbarResult.ActionPerformed) {
+                breedViewModel.onAction(BreedAction.OnLoadBreeds)
+            }
+        }
+    }
 
     LaunchedEffect(reachedBottom) {
         if (reachedBottom && !uiState.isLoading && !uiState.isReachLimit) {

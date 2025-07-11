@@ -6,4 +6,7 @@
 
     <string name="cats">Cats</string>
     <string name="favorites">Favoritos</string>
+
+    <string name="requestError">Algo salio mal...</string>
+    <string name="requestAction">Reintentar</string>
 </resources>

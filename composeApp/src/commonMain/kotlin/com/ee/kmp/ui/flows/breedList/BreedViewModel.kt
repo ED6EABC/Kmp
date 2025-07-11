@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ee.kmp.data.model.Breed
 import com.ee.kmp.data.remote.APIs
+import com.ee.kmp.data.remote.HttpResponse
 import com.ee.kmp.domine.useCases.FindFavoriteUseCase
 import com.ee.kmp.domine.useCases.GetBreedsUseCase
 import com.ee.kmp.domine.useCases.RemoveFavoriteUseCase
@@ -34,27 +35,50 @@ class BreedViewModel(
     init { onAction(BreedAction.OnLoadBreeds) }
 
     private fun getData() {
-        setLoader(true)
+        _uiState.update { it.copy(isLoading = true, error = NetworkError()) }
         viewModelScope.launch(Dispatchers.IO) {
-            val content = getBreedsUseCase.invoke(APIs.Breeds.Request(_uiState.value.page, 10))
+            val response = getBreedsUseCase.invoke(APIs.Breeds.Request(_uiState.value.page, 10))
 
-            val newContent = _uiState.value.breeds
-            newContent.addAll(content.breeds)
+            when(response) {
+                is HttpResponse.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = NetworkError(
+                                isError = true,
+                                canRetry = true
+                            )
+                        )
+                    }
+                }
+                HttpResponse.Exception -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = NetworkError(
+                                isError = true,
+                                canRetry = false
+                            )
+                        )
+                    }
+                }
+                is HttpResponse.Success<*> -> {
+                    val newContent = _uiState.value.breeds
+                    val content = response.data as APIs.Breeds.Response
+                    newContent.addAll(content.breeds)
 
-            _uiState.update {
-                it.copy(
-                    breeds = newContent,
-                    page = it.page + 1,
-                    isError = false,
-                    isReachLimit = newContent.size >= content.paginationCount
-                )
+                    _uiState.update {
+                        it.copy(
+                            breeds = newContent,
+                            page = it.page + 1,
+                            isLoading = false,
+                            error = NetworkError(),
+                            isReachLimit = newContent.size >= content.paginationCount
+                        )
+                    }
+                }
             }
-            setLoader(false)
         }
-    }
-
-    private fun setLoader(state: Boolean) {
-        _uiState.update { it.copy(isLoading = state) }
     }
 
     private fun saveFavorite(breedDetail: BreedDetail) {
@@ -95,6 +119,11 @@ data class UiState(
     var breeds: MutableList<Breed> = mutableListOf(),
     var isLoading: Boolean = true,
     var page: Int = 0,
-    var isError: Boolean = false,
+    var error: NetworkError = NetworkError(),
     var isReachLimit: Boolean = false
+)
+
+data class NetworkError(
+    var isError: Boolean = false,
+    var canRetry: Boolean = false
 )
