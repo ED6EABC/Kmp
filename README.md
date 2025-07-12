@@ -18,7 +18,7 @@ This is a Kotlin Multiplatform project targeting Android, Desktop.
 5.  You can now launch the app from your Applications folder or Launchpad.
 6.  Enjoy!
 
-Architecture. 
+### Architecture. 
 
 This project is divided into three layers
  - Data
@@ -35,3 +35,19 @@ This project is divided into three layers
      - Used to handle the business logic and the UI.
    - MVI 
      - Used to handle the state of the UI.
+
+### How to use the app
+
+1. Install the app.
+2. Sign in with email and password.
+    - The app validates the email and password structure.
+    - The password must have:
+        - a lowercase letter
+        - an uppercase letter
+        - a number
+        - length from 8 to 10 characters
+3. After the first login, the app will remember the user, and in a second use, it won't show the register form.
+4. The app will show a view with a list of cat's breeds.
+5. If you tap over a card, it will show the full detail of the breed.
+6. You can save the breed as your favorite by pushing the heart button, but if the breed is already in your favorites and you push it again, it will be removed from your favorite list.
+7. At the top bar you will see a heart icon; if you push it, you will see a list of your favorite breeds. 
